@@ -96,14 +96,16 @@ class Markers {
 				const newIcon = this.getIcon(newMarkerObject.color);
 
 				// Обновляем визуал попапа
-				$title.value = newMarkerObject.title;
-				$description.value = newMarkerObject.description;
-				$type.value = newMarkerObject.type;
+				$title.innerText = newMarkerObject.title;
+				$description.innerText = newMarkerObject.description;
+				$type.innerText = newMarkerObject.type;
 				marker.setIcon(newIcon);
 
 				// Возвращаем попап на карту
 				marker._popup.openOn(this.map);
 
+				// Обновляем маркер
+				markerObject = newMarkerObject;
 				// Обновляем маркер в стейте
 				this.state[index] = newMarkerObject;
 				// Сохраняем в localStorage
@@ -203,7 +205,7 @@ class Markers {
 			className: 'pin-parent',
 			iconSize: [20, 27],
 			iconAnchor: [12, 38],
-			popupAnchor: [0.5, -16],
+			popupAnchor: [0.5, -23],
 			color,
 			html: `<div class="pin" style="--color: ${color}"></div>`
 		  })
