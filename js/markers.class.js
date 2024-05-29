@@ -9,7 +9,7 @@ class Markers {
 	// Скрытые маркеры
 	hidedMarkers = [];
 	// Цвет маркера по умолчанию
-	markerColor = "0099ff";
+	markerColor = "#0099ff";
 	// Координаты по умолчанию
 	defaultLatlng = [55.750494675436116, 37.617487907409675];
 	// Масштаб по умолчанию
@@ -138,9 +138,6 @@ class Markers {
 			// Созадём форму
 			const prompt = document.createElement('form');
 			prompt.classList.add('prompt');
-
-			// Получаем икноку маркера
-			const markerColor = this.getColoredMarker(color);
 			
 			prompt.innerHTML = `
 				<div class="popup-content">
@@ -148,8 +145,8 @@ class Markers {
 					<textarea name="description" placeholder="Описание">${description}</textarea>
 					<input type="text" name="type" value="${type}" autocomplete="off" placeholder="Тип" />
 					<label class="popup-color">
-						<input type="color" name="color" value="#${color}" />
-						Цвет маркера: <img id="markerColor" src="${markerColor}" alt="Marker" />
+						<input type="color" name="color" value="${color}" />
+						Цвет маркера: <div class="pin" id="markerColor" style="--color: ${color}"></div>
 					</label>
 				</div>
 				<div class="popup-actions">
@@ -174,7 +171,7 @@ class Markers {
 				const title = prompt.elements.title.value;
 				const description = prompt.elements.description.value;
 				const type = prompt.elements.type.value;
-				const color = prompt.elements.color.value.replace('#', '');
+				const color = prompt.elements.color.value;
 
 				// Возвращаем данные
 				resolve({ latlng, title, description, type, color });
@@ -188,11 +185,9 @@ class Markers {
 
 			prompt.elements.color.addEventListener('change', ({ target }) => {
 				// Получаем цвет
-				const color = target.value.replace('#', '');
-				// Получаем иконку маркера
-				const markerColor = this.getColoredMarker(color);
+				const color = target.value;
 				// Обновляем представление
-				prompt.querySelector('#markerColor').src = markerColor;
+				prompt.querySelector('#markerColor').setAttribute("style", "--color: " + color);
 			});
 
 			// reject при закрытии попапа
@@ -202,18 +197,16 @@ class Markers {
 			popup.openOn(this.map);
 		})
 	}
-	
-	getColoredMarker(color) {
-		return `https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|${color}&chf=a,s,ee00FFFF`
-	}
 
 	getIcon(color) {
-		return L.icon({
-			iconUrl: this.getColoredMarker(color),
-			iconSize: [21, 34],
-			iconAnchor: [10.5, 28],
-			popupAnchor: [0.5, -16]
-		})
+		return L.divIcon({
+			className: 'pin-parent',
+			iconSize: [20, 27],
+			iconAnchor: [12, 38],
+			popupAnchor: [0.5, -16],
+			color,
+			html: `<div class="pin" style="--color: ${color}"></div>`
+		  })
 	}
 
 	getPopup({ title, description, type }) {
