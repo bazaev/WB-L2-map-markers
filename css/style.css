@@ -55,7 +55,7 @@ html, body {
 }
 
 .prompt #markerColor {
-	height: 18px;
+	transform: scale(.7);
 	cursor: pointer;
 }
 
@@ -124,4 +124,30 @@ html, body {
 
 .popup-btn.red:active {
 	background-color: rgb(200, 128, 128);
+}
+
+.pin-parent {
+	background-color: initial;
+	border: initial;
+}
+
+.pin {
+	--color: #0099ff;
+	position: relative;
+	display: inline-block;
+	border-radius: 50%;
+	border: 8px solid var(--color);
+	width: 8px;
+	height: 8px;
+}
+
+.pin::after {
+	position: absolute;
+	content: '';
+	width: 0px;
+	height: 0px;
+	bottom: -30px;
+	left: -6px;
+	border: 10px solid transparent;
+	border-top: 17px solid var(--color);
 }
